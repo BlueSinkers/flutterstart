@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
+import 'package:terpiez/models/app_state.dart';
 import 'package:terpiez/screens/home_screen.dart';
 
 Future<void> main() async {
@@ -19,18 +21,21 @@ class TerpiezApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Terpiez',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
-        scaffoldBackgroundColor: Colors.grey.shade50,
-        cardTheme: const CardThemeData(
-          margin: EdgeInsets.zero,
-          elevation: 1,
+    return ChangeNotifierProvider(
+      create: (_) => AppState(),
+      child: MaterialApp(
+        title: 'Terpiez',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
+          scaffoldBackgroundColor: Colors.grey.shade50,
+          cardTheme: const CardThemeData(
+            margin: EdgeInsets.zero,
+            elevation: 1,
+          ),
         ),
+        home: const HomeScreen(),
       ),
-      home: const HomeScreen(),
     );
   }
 }

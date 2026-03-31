@@ -20,6 +20,7 @@ class ListTab extends StatelessWidget {
       separatorBuilder: (context, index) => const SizedBox(height: 12),
       itemBuilder: (context, index) {
         final terpiezType = terpiezTypes[index];
+        final heroTag = 'terpiez-icon-${terpiezType.name}';
 
         return Card(
           child: ListTile(
@@ -27,7 +28,10 @@ class ListTab extends StatelessWidget {
               horizontal: 20,
               vertical: 10,
             ),
-            leading: Icon(terpiezType.icon, size: 28),
+            leading: Hero(
+              tag: heroTag,
+              child: Icon(terpiezType.icon, size: 28),
+            ),
             title: Text(terpiezType.name),
             trailing: const Icon(Icons.chevron_right),
             onTap: () {
@@ -35,7 +39,10 @@ class ListTab extends StatelessWidget {
                 context,
                 MaterialPageRoute<void>(
                   builder: (context) =>
-                      TerpiezDetailsScreen(terpiezType: terpiezType),
+                      TerpiezDetailsScreen(
+                        terpiezType: terpiezType,
+                        heroTag: heroTag,
+                      ),
                 ),
               );
             },

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'package:terpiez/models/app_state.dart';
 
 class FinderTab extends StatelessWidget {
   const FinderTab({super.key});
@@ -26,11 +29,39 @@ class FinderTab extends StatelessWidget {
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(16),
-                      child: SizedBox(
-                        height: imageHeight,
-                        child: Image.asset(
-                          placeholderMapPath,
-                          fit: BoxFit.cover,
+                      child: Material(
+                        color: Colors.transparent,
+                        child: GestureDetector(
+                          onTap: context.read<AppState>().incrementTerpiezCaught,
+                          child: Stack(
+                            alignment: Alignment.bottomCenter,
+                            children: [
+                              SizedBox(
+                                height: imageHeight,
+                                width: double.infinity,
+                                child: Image.asset(
+                                  placeholderMapPath,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 10,
+                                ),
+                                color: Colors.black45,
+                                child: Text(
+                                  'Tap map to catch a Terpiez',
+                                  textAlign: TextAlign.center,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(color: Colors.white),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),

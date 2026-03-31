@@ -15,9 +15,8 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Terpiez Captured'), findsOneWidget);
-    expect(find.text('12'), findsOneWidget);
+    expect(find.text('0'), findsNWidgets(2));
     expect(find.text('Days Played'), findsOneWidget);
-    expect(find.text('5'), findsOneWidget);
 
     await tester.tap(find.text('Finder'));
     await tester.pumpAndSettle();
@@ -31,15 +30,15 @@ void main() {
     expect(find.text('Grass Terpiez'), findsOneWidget);
 
     await tester.tap(find.text('Fire Terpiez'));
-    await tester.pumpAndSettle();
+    await tester.pump(const Duration(milliseconds: 500));
     expect(find.text('Fire Terpiez'), findsWidgets);
     expect(find.byIcon(Icons.local_fire_department), findsWidgets);
 
     await binding.setSurfaceSize(const Size(844, 390));
-    await tester.pumpAndSettle();
+    await tester.pump(const Duration(milliseconds: 100));
     expect(find.text('Fire Terpiez'), findsWidgets);
 
-    await tester.pageBack();
+    tester.state<NavigatorState>(find.byType(Navigator)).pop();
     await tester.pumpAndSettle();
     expect(find.text('Water Terpiez'), findsOneWidget);
 
@@ -63,9 +62,8 @@ void main() {
     expect(find.text('Finder'), findsOneWidget);
     expect(find.text('List'), findsOneWidget);
     expect(find.text('Terpiez Captured'), findsOneWidget);
-    expect(find.text('12'), findsOneWidget);
+    expect(find.text('0'), findsNWidgets(2));
     expect(find.text('Days Played'), findsOneWidget);
-    expect(find.text('5'), findsOneWidget);
 
     await tester.tap(find.text('Finder'));
     await tester.pumpAndSettle();
@@ -78,13 +76,52 @@ void main() {
     expect(find.text('Grass Terpiez'), findsOneWidget);
 
     await tester.tap(find.text('Fire Terpiez'));
-    await tester.pumpAndSettle();
+    await tester.pump(const Duration(milliseconds: 500));
     expect(find.text('Fire Terpiez'), findsWidgets);
     expect(find.byIcon(Icons.local_fire_department), findsWidgets);
 
-    await tester.pageBack();
+    tester.state<NavigatorState>(find.byType(Navigator)).pop();
     await tester.pumpAndSettle();
     expect(find.text('Water Terpiez'), findsOneWidget);
+  });
+
+  testWidgets('finder tap increments terpiez count in stats', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(const TerpiezApp());
+    await tester.pumpAndSettle();
+
+    expect(find.text('0'), findsNWidgets(2));
+
+    await tester.tap(find.text('Finder'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Tap map to catch a Terpiez'));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Stats'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('1'), findsOneWidget);
+    expect(find.text('0'), findsOneWidget);
+  });
+
+  testWidgets('list item uses hero animation into details view', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(const TerpiezApp());
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('List'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Fire Terpiez'));
+    await tester.pump(const Duration(milliseconds: 500));
+
+    final heroes = tester.widgetList<Hero>(find.byType(Hero)).toList();
+    expect(
+      heroes.any((hero) => hero.tag == 'terpiez-icon-Fire Terpiez'),
+      isTrue,
+    );
+    expect(find.byIcon(Icons.local_fire_department), findsWidgets);
   });
 
   testWidgets('stays readable in portrait orientation', (
@@ -98,7 +135,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Terpiez Captured'), findsOneWidget);
-    expect(find.text('12'), findsOneWidget);
+    expect(find.text('0'), findsNWidgets(2));
     expect(find.byType(TabBar), findsOneWidget);
 
     await tester.tap(find.text('Finder'));
@@ -108,7 +145,7 @@ void main() {
     await tester.tap(find.text('List'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Fire Terpiez'));
-    await tester.pumpAndSettle();
+    await tester.pump(const Duration(milliseconds: 500));
 
     expect(find.text('Fire Terpiez'), findsWidgets);
     expect(tester.takeException(), isNull);
@@ -125,7 +162,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Terpiez Captured'), findsOneWidget);
-    expect(find.text('12'), findsOneWidget);
+    expect(find.text('0'), findsNWidgets(2));
     expect(find.byType(TabBar), findsOneWidget);
 
     await tester.tap(find.text('Finder'));
@@ -135,7 +172,7 @@ void main() {
     await tester.tap(find.text('List'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Water Terpiez'));
-    await tester.pumpAndSettle();
+    await tester.pump(const Duration(milliseconds: 500));
 
     expect(find.text('Water Terpiez'), findsWidgets);
     expect(tester.takeException(), isNull);

@@ -1,40 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'package:terpiez/models/app_state.dart';
 
 class StatsTab extends StatelessWidget {
   const StatsTab({super.key});
 
-  static const int terpiezCaptured = 12;
-  static const int daysPlayed = 5;
-
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-          child: ConstrainedBox(
-            constraints: BoxConstraints(minHeight: constraints.maxHeight - 40),
-            child: Center(
+    return Consumer<AppState>(
+      builder: (context, appState, child) {
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
               child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 340),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _StatCard(
-                      label: 'Terpiez Captured',
-                      value: '$terpiezCaptured',
+                constraints: BoxConstraints(minHeight: constraints.maxHeight - 40),
+                child: Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 340),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        _StatCard(
+                          label: 'Terpiez Captured',
+                          value: '${appState.terpiezCaught}',
+                        ),
+                        const SizedBox(height: 16),
+                        _StatCard(
+                          label: 'Days Played',
+                          value: '${appState.daysPlayed}',
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 16),
-                    _StatCard(
-                      label: 'Days Played',
-                      value: '$daysPlayed',
-                    ),
-                  ],
+                  ),
                 ),
               ),
-            ),
-          ),
+            );
+          },
         );
       },
     );
