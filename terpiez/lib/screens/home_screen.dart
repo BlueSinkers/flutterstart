@@ -26,6 +26,7 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           body: const TabBarView(
+            physics: NeverScrollableScrollPhysics(),
             children: [
               StatsTab(),
               FinderTab(),
